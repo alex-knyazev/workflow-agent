@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Workflow Agent Rules</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero">
+        <div class="hero-header">
+          <div>
+            <p class="eyebrow">Team Workflow Agent</p>
+            <h1>Управление правилами мониторинга</h1>
+            <p class="hero-copy">
+              Включайте и выключайте правила, меняйте расписание и сохраняйте
+              overrides без правок в коде.
+            </p>
+          </div>
+          <button
+            id="logout-button"
+            class="pure-button logout-button hidden"
+            type="button"
+          >
+            Выйти
+          </button>
+        </div>
+      </section>
+
+      <section class="status-row">
+        <div
+          id="status-banner"
+          class="status-banner status-banner-hidden"
+        ></div>
+      </section>
+
+      <section>
+        <div id="auth-panel" class="auth-panel hidden"></div>
+        <div id="rules-grid" class="rules-grid"></div>
+      </section>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

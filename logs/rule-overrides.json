@@ -1,0 +1,9 @@
+{
+  "daily-sprint-status-digest": {
+    "schedule": {
+      "kind": "cron",
+      "cronExpression": "10 10 * * *",
+      "timeZone": "Europe/Moscow"
+    }
+  }
+}

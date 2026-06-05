@@ -1,0 +1,8 @@
+node_modules
+dist
+.git
+.gitignore
+.env
+.DS_Store
+logs/*
+!logs/rule-overrides.json
