@@ -31,6 +31,10 @@ import {
   createCodeReviewWorkingDayAlertRule,
   DEFAULT_CODE_REVIEW_WORKING_DAY_ALERT_SCHEDULE
 } from "./codeReviewWorkingDayAlertRule.js";
+import {
+  createStackTitlePrefixNormalizationAlertRule,
+  DEFAULT_STACK_TITLE_PREFIX_NORMALIZATION_SCHEDULE
+} from "./stackTitlePrefixNormalizationAlertRule.js";
 
 interface RuleCatalogDeps {
   readonly jiraBaseUrl: string;
@@ -157,6 +161,20 @@ export function createRuleCatalog(deps: RuleCatalogDeps): readonly RuleDefinitio
         }
 
         return createCodeReviewWorkingDayAlertRule(deps.jiraBaseUrl, schedule);
+      }
+    },
+    {
+      id: "stack-title-prefix-normalization",
+      name: "Stack title prefix normalization",
+      description: "Нормализует префикс заголовка задачи по значению поля Stack и проставляет единый формат с emoji.",
+      defaultEnabled: true,
+      defaultSchedule: DEFAULT_STACK_TITLE_PREFIX_NORMALIZATION_SCHEDULE,
+      buildRule(schedule) {
+        if (schedule.kind !== "cron") {
+          throw new Error("stack-title-prefix-normalization supports only cron schedule");
+        }
+
+        return createStackTitlePrefixNormalizationAlertRule(schedule);
       }
     }
   ];

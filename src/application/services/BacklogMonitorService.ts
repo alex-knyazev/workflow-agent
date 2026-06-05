@@ -168,17 +168,24 @@ export class BacklogMonitorService {
 
       let quoteFallbackUsed = 0;
       let clearedSprintCount = 0;
+      let updatedSummaryCount = 0;
+      let deliveredNotificationCount = 0;
       for (const notification of evaluation.notifications) {
         if (notification.usedFallback) {
           quoteFallbackUsed += 1;
         }
 
-        await this.notifier.sendMessage(
-          notification.message,
-          notification.destinationChannel
-            ? { channel: notification.destinationChannel }
-            : undefined
-        );
+        const shouldDeliverNotification = notification.deliverNotification ?? true;
+        if (shouldDeliverNotification && notification.message.trim().length > 0) {
+          await this.notifier.sendMessage(
+            notification.message,
+            notification.destinationChannel
+              ? { channel: notification.destinationChannel }
+              : undefined
+          );
+          deliveredNotificationCount += 1;
+        }
+
         if (!options.skipIssueMutations) {
           for (const issueKey of notification.issueKeysToLabel) {
             await this.labelWriter.addLabel(issueKey, rule.handledLabel);
@@ -188,16 +195,21 @@ export class BacklogMonitorService {
             await this.labelWriter.clearSprintField(issueKey);
             clearedSprintCount += 1;
           }
+
+          for (const update of notification.issueSummariesToUpdate ?? []) {
+            await this.labelWriter.updateSummary(update.issueKey, update.summary);
+            updatedSummaryCount += 1;
+          }
         }
       }
 
       const matchedRules = evaluation.matchedIssuesCount;
       const skipBase = dataSource === "kommersant_payments_news" ? newsItems.length : eligibleIssues.length;
       const skippedNoTrigger = Math.max(skipBase - matchedRules, 0);
-      const notified = evaluation.notifications.length;
+      const notified = deliveredNotificationCount;
 
       console.log(
-        `[workflow-agent] rule=${rule.id} result fetched=${sourcePayload.fetchedCount}, matchedRules=${matchedRules}, notified=${notified}, skippedHandled=${skippedHandled}, skippedNoTrigger=${skippedNoTrigger}, quoteFallbackUsed=${quoteFallbackUsed}, clearedSprintCount=${clearedSprintCount}`
+        `[workflow-agent] rule=${rule.id} result fetched=${sourcePayload.fetchedCount}, matchedRules=${matchedRules}, notified=${notified}, skippedHandled=${skippedHandled}, skippedNoTrigger=${skippedNoTrigger}, quoteFallbackUsed=${quoteFallbackUsed}, clearedSprintCount=${clearedSprintCount}, updatedSummaryCount=${updatedSummaryCount}`
       );
 
       ruleState.lastRunAt = now;

@@ -16,8 +16,13 @@ export interface AlertNotification {
   readonly message: string;
   readonly usedFallback: boolean;
   readonly destinationChannel?: string;
+  readonly deliverNotification?: boolean;
   readonly issueKeysToLabel: readonly string[];
   readonly issueKeysToClearSprint: readonly string[];
+  readonly issueSummariesToUpdate?: readonly {
+    readonly issueKey: string;
+    readonly summary: string;
+  }[];
 }
 
 export interface AlertRuleEvaluationContext {

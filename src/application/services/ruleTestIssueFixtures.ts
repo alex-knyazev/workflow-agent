@@ -141,6 +141,16 @@ export function createTestIssuesForRule(
           ]
         })
       ];
+    case "stack-title-prefix-normalization":
+      return [
+        createBaseIssue({
+          id: "90008",
+          key: "PAY-9008",
+          summary: "Backend: Доработать обработчик вебхуков",
+          stack: "python",
+          projectKey
+        })
+      ];
     default:
       return [];
   }

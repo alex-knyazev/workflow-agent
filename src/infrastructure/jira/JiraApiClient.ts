@@ -167,6 +167,14 @@ export class JiraApiClient implements JiraIssueSource, IssueLabelWriter {
       }
     });
   }
+
+  async updateSummary(issueKey: string, summary: string): Promise<void> {
+    await this.http.put(`/rest/api/2/issue/${encodeURIComponent(issueKey)}`, {
+      fields: {
+        summary
+      }
+    });
+  }
 }
 
 function buildProjectJqlList(projectKeys: readonly string[]): string {
