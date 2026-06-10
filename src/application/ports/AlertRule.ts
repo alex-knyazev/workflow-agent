@@ -52,11 +52,12 @@ export interface CronAlertRuleSchedule {
 
 export type AlertRuleSchedule = IntervalAlertRuleSchedule | CronAlertRuleSchedule;
 
-export type AlertRuleIssueScope = "active" | "cancelled_with_sprint";
+export type AlertRuleIssueScope = "active" | "cancelled_with_sprint" | "done_mobile";
 
 export type AlertRuleDataSource =
   | "jira_active_issues"
   | "jira_cancelled_with_sprint_issues"
+  | "jira_done_mobile_issues"
   | "kommersant_payments_news";
 
 export interface AlertRule {

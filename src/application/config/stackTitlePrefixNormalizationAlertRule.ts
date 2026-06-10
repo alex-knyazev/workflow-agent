@@ -15,7 +15,7 @@ export const DEFAULT_STACK_TITLE_PREFIX_NORMALIZATION_SCHEDULE: CronAlertRuleSch
 };
 
 const STACK_TOKEN_PATTERN = "backend|frontend|android|ios|python|react";
-const STACK_EMOJI_PATTERN = "⚙️|⚙|⚛️|⚛|🤖|🍏|🍎|🐛|🚨";
+const STACK_EMOJI_PATTERN = "⚙️|⚙|⚛️|⚛|🤖|🍏|🍎|🪲|🚨";
 const BRACKET_PREFIX_RE = new RegExp(
   `^\\s*\\[\\s*(?:(?:${STACK_EMOJI_PATTERN})\\s+)*(?:${STACK_TOKEN_PATTERN})\\s*\\]\\s*[:\\-]?\\s*`,
   "iu"

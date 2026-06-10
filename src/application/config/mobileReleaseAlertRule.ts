@@ -84,6 +84,7 @@ async function buildMobileReleaseAlertMessage(
 export const mobileReleaseAlertRule: AlertRule = {
   id: "mobile-release-alert",
   schedule: DEFAULT_MOBILE_RELEASE_ALERT_SCHEDULE,
+  issueScope: "done_mobile",
   handledLabel: "wa-mobile-release-alert",
   evaluate(context) {
     return evaluatePerIssueRule(this, context);

@@ -108,9 +108,9 @@ export class JiraApiClient implements JiraIssueSource, IssueLabelWriter {
 
     const jql = [
       `project in (${buildProjectJqlList(this.teamProjectKeys)})`,
+      'resolved > "2026-06-01 00:00"',
       "status in (Cancelled, CANCELLED)",
-      `${this.sprintFieldId} is not EMPTY`,
-      "ORDER BY updated DESC"
+      'Sprint is not EMPTY',
     ].join(" AND ");
 
     const issues: JiraIssue[] = [];
@@ -122,6 +122,50 @@ export class JiraApiClient implements JiraIssueSource, IssueLabelWriter {
         params: {
           jql,
           fields: buildFields(this.stackFieldId, this.bugEnvironmentFieldId, this.sprintFieldId),
+          startAt,
+          maxResults: pageSize
+        }
+      });
+
+      issues.push(
+        ...response.data.issues.map((issue) =>
+          mapIssue(issue, this.stackFieldId, this.bugEnvironmentFieldId, this.sprintFieldId)
+        )
+      );
+
+      const nextStartAt = response.data.startAt + response.data.issues.length;
+      if (nextStartAt >= response.data.total || response.data.issues.length === 0) {
+        break;
+      }
+
+      startAt = nextStartAt;
+    }
+
+    return issues;
+  }
+
+  async findDoneMobileIssues(): Promise<readonly JiraIssue[]> {
+    if (!this.stackFieldId) {
+      return [];
+    }
+
+    const jql = [
+      `project in (${buildProjectJqlList(this.teamProjectKeys)})`,
+      "status = Done",
+      `Стек in ("Android","iOS")`,
+      "resolved > \"2026-06-08 00:00\""
+    ].join(" AND ");
+
+    const issues: JiraIssue[] = [];
+    let startAt = 0;
+    const pageSize = 100;
+
+    while (true) {
+      const response = await this.http.get<JiraSearchResponse>("/rest/api/2/search", {
+        params: {
+          jql,
+          fields: buildFields(this.stackFieldId, this.bugEnvironmentFieldId, this.sprintFieldId),
+          expand: "changelog",
           startAt,
           maxResults: pageSize
         }

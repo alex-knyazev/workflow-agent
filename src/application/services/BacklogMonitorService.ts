@@ -396,6 +396,10 @@ function resolveDataSource(rule: AlertRule): AlertRuleDataSource {
     return "jira_cancelled_with_sprint_issues";
   }
 
+  if (rule.issueScope === "done_mobile") {
+    return "jira_done_mobile_issues";
+  }
+
   return "jira_active_issues";
 }
 
@@ -440,7 +444,9 @@ async function loadSourcePayload(args: {
 
   const issues = args.dataSource === "jira_cancelled_with_sprint_issues"
     ? await args.issueSource.findCancelledIssuesWithSprint()
-    : await args.issueSource.findActiveIssues();
+    : args.dataSource === "jira_done_mobile_issues"
+      ? await args.issueSource.findDoneMobileIssues()
+      : await args.issueSource.findActiveIssues();
 
   return {
     issues,
