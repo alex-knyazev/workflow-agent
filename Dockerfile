@@ -28,7 +28,8 @@ COPY --from=build /app/public ./public
 COPY --from=build /app/logs ./logs
 COPY scripts/docker-entrypoint.sh ./scripts/docker-entrypoint.sh
 
-RUN chown -R node:node /app
+RUN chmod +x /app/scripts/docker-entrypoint.sh \
+	&& chown -R node:node /app
 
 EXPOSE 3210
 
