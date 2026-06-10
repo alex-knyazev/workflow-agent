@@ -224,6 +224,19 @@ docker run -d \
   team-workflow-agent
 ```
 
+Если контейнер уже был запущен на старом образе и при изменении расписания появляется `EACCES: permission denied, open 'logs/rule-overrides.json'`, пересобери образ и перезапусти контейнер. Новый entrypoint сам выставит права на `logs/` и связанные файлы внутри контейнера:
+
+```bash
+docker build -t team-workflow-agent .
+docker rm -f team-workflow-agent
+docker run -d \
+  --name team-workflow-agent \
+  --env-file .env \
+  -p 3210:3210 \
+  -v $(pwd)/logs:/app/logs \
+  team-workflow-agent
+```
+
 Если хочешь использовать другой порт, задай `PORT` и синхронно измени проброс, например `-e PORT=8080 -p 8080:8080`.
 
 После этого интерфейс будет доступен на `http://<server-ip>:3210`.
