@@ -25,7 +25,14 @@ const STATIC_FILE_PATHS = new Map<string, string>([
   ["/", resolve(process.cwd(), "public/index.html")],
   ["/index.html", resolve(process.cwd(), "public/index.html")],
   ["/app.js", resolve(process.cwd(), "public/app.js")],
-  ["/styles.css", resolve(process.cwd(), "public/styles.css")]
+  ["/styles.css", resolve(process.cwd(), "public/styles.css")],
+  ["/favicon.ico", resolve(process.cwd(), "favicon_io/favicon.ico")],
+  ["/favicon-16x16.png", resolve(process.cwd(), "favicon_io/favicon-16x16.png")],
+  ["/favicon-32x32.png", resolve(process.cwd(), "favicon_io/favicon-32x32.png")],
+  ["/apple-touch-icon.png", resolve(process.cwd(), "favicon_io/apple-touch-icon.png")],
+  ["/android-chrome-192x192.png", resolve(process.cwd(), "favicon_io/android-chrome-192x192.png")],
+  ["/android-chrome-512x512.png", resolve(process.cwd(), "favicon_io/android-chrome-512x512.png")],
+  ["/site.webmanifest", resolve(process.cwd(), "favicon_io/site.webmanifest")]
 ]);
 
 export class RuleManagementHttpServer {
@@ -311,6 +318,18 @@ async function readJsonBody(request: IncomingMessage): Promise<unknown> {
 
 function getContentType(requestPath: string): string {
   const extension = extname(requestPath);
+  if (extension === ".ico") {
+    return "image/x-icon";
+  }
+
+  if (extension === ".png") {
+    return "image/png";
+  }
+
+  if (extension === ".webmanifest") {
+    return "application/manifest+json; charset=utf-8";
+  }
+
   if (extension === ".js") {
     return "application/javascript; charset=utf-8";
   }
